@@ -14,8 +14,63 @@ typedef struct student{
     float totalGPA;
 }st;
 
-float gradingPoint(float num){
+float gradingPoint(float num);
+void asciImg();
+int loginAccess( char name[], char password[] );
+void append();
+void add();
+void view();
+void search();
+void reset();
+int interface();
 
+int main(){
+
+    system("cls");
+    asciImg();
+    char userName[50];
+    char UserPassword[50];
+    char any[10];
+
+
+    label:
+    system("cls");
+    asciImg();
+    printf("\t\t\t\t\t- LOGIN: \n\n\n\n");
+    printf("Enter Name: ");
+    scanf(" %[^\n]s", userName);
+    printf("Enter Password: ");
+    scanf(" %[^\n]", UserPassword);
+    int status = loginAccess(userName, UserPassword);
+    if( status == 1 ){
+        interface();
+        printf("\nPress any number/character to continue.....");
+        scanf(" %s", any);
+    }
+    else if( status == -1){
+        printf("\nInvalid Password\n");
+        printf("\nPress any number/character to continue.....");
+        scanf(" %s", any);
+        goto label;
+    }
+    else if( status == -2 ){
+        printf("\nInvalid Username\n");
+        printf("\nPress any number/character to continue.....");
+        scanf(" %s", any);
+        goto label;
+    }
+    else {
+        printf("\nBoth username and password invalid \n");
+        printf("\nPress any number/character to continue.....");
+        scanf(" %s", any);
+        goto label;
+    }
+
+    return 0;
+}
+
+float gradingPoint(float num){
+    // NSU grading system
     if( num >= 93 ) return 4.0;// A Excellent
     else if( num >= 90 ) return 3.7; // A-
     else if( num >= 87 ) return 3.3; // B+
@@ -57,7 +112,7 @@ void append(){
     asciImg();
 
     int size = 0;
-    printf("How many student do you want to create: ");
+    printf("\nHow many student do you want to create: ");
     scanf("%d", &size);
     st stu[size];
 
@@ -72,6 +127,7 @@ void append(){
         stu[i].totalCredit = 0;
         stu[i].cgpa = 0.0;
         stu[i].totalGPA = 0.0;
+        printf("\n\n");
         fwrite(&stu[i], sizeof(st), 1, fp);
     }
     fclose(fp);
@@ -152,7 +208,7 @@ void view(){
 
     fp = fopen("database.txt", "r");
     printf("\n%10s | %20s | %15s | %15s | %10s | %10s\n", "ID", "Name", "Complete course", "Total Credit", "Total GPA" , "CGPA");
-    printf("\n\t---------------------------------------------------------------------------------------\n\n","","","","","","");
+    printf("\n\t-----------------------------------------------------------------------------------------\n\n","","","","","","");
     while( fread(&stu, sizeof(st), 1, fp ) ){
         printf("%10s | %20s | %15d | %15d | %10.2f | %10.2f\n",
                 stu.id, stu.name, stu.totalCourse, stu.totalCredit, stu.totalGPA, stu.cgpa  );
@@ -175,11 +231,12 @@ void search(){
     printf("\n");
 
     int found = 0;
-        printf("\n%10s | %20s | %15s | %15s | %10s | %10s\n", "ID", "Name", "Complete course", "Total Credit", "Total Credit" , "CGPA");
-    printf("\n\t---------------------------------------------------------------------------------------\n\n","","","","","","");
+
     while( fread(&stu, sizeof(st), 1, fp ) ){
         if( !strcmp( studentID, stu.id ) ){
             found = 1;
+            printf("\n%10s | %20s | %15s | %15s | %10s | %10s\n", "ID", "Name", "Complete course", "Total Credit", "Total Credit" , "CGPA");
+            printf("\n\t-----------------------------------------------------------------------------------------\n\n","","","","","","");
             printf("%10s | %20s | %15d | %15d | %10.2f | %10.2f\n", stu.id, stu.name, stu.totalCourse, stu.totalCredit, stu.totalGPA, stu.cgpa  );
         }
     }
@@ -249,49 +306,4 @@ int interface(){
     }
 }
 
-
-int main(){
-
-    system("cls");
-    asciImg();
-    char userName[50];
-    char UserPassword[50];
-    char any[10];
-
-
-    label:
-    system("cls");
-    asciImg();
-
-    printf("Enter Name: ");
-    scanf(" %[^\n]s", userName);
-    printf("Enter Password: ");
-    scanf(" %[^\n]", UserPassword);
-    int status = loginAccess(userName, UserPassword);
-    if( status == 1 ){
-        interface();
-        printf("\nPress any number/character to continue.....");
-        scanf(" %s", any);
-    }
-    else if( status == -1){
-        printf("\nInvalid Password\n");
-        printf("\nPress any number/character to continue.....");
-        scanf(" %s", any);
-        goto label;
-    }
-    else if( status == -2 ){
-        printf("\nInvalid Username\n");
-        printf("\nPress any number/character to continue.....");
-        scanf(" %s", any);
-        goto label;
-    }
-    else {
-        printf("\nBoth username and password invalid \n");
-        printf("\nPress any number/character to continue.....");
-        scanf(" %s", any);
-        goto label;
-    }
-
-    return 0;
-}
 
